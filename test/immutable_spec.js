@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 describe('Immutability', () => {
 
@@ -19,7 +19,7 @@ describe('Immutability', () => {
 
 	});
 
-	describe('A List', () => {
+	describe('A list', () => {
 		
 		function addMovie(currentState, movie) {
 			return currentState.push(movie);
@@ -35,6 +35,33 @@ describe('Immutability', () => {
 			expect(state).to.equal(List.of(
 				'The Dark Knight Rises', 'Memento'
 			));
+		});
+
+	});
+
+	describe('A tree', () => {
+		
+		function addMovie(currentState, movie) {
+			return currentState.set(
+				'movies',
+				currentState.get('movies').push(movie)
+			);
+		}
+
+		it('is immutable', () => {
+			let state = Map({
+				movies: List.of('The Dark Knight Rises', 'Memento')
+			});
+			let nextState = addMovie(state, 'Inception');
+
+			expect(nextState).to.equal(Map({
+				movies: 
+					List.of('The Dark Knight Rises', 'Memento', 'Inception')
+			}));
+			expect(state).to.equal(Map({
+				movies:
+					List.of('The Dark Knight Rises', 'Memento')
+			}));
 		});
 
 	});
